@@ -68,7 +68,7 @@ export function Select({ value, onValueChange, children }: { value?: string; onV
     <select
       value={value}
       onChange={e => onValueChange?.(e.target.value)}
-      className={`h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ${triggerClass}`}
+      className={`h-10 rounded-lg border border-border bg-card text-foreground px-3 py-2 text-sm transition-colors duration-200 hover:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20 ${triggerClass}`}
     >
       {!value && <option value="">{placeholder}</option>}
       {items.map(item => (

@@ -46,8 +46,8 @@ export function DropdownMenuContent({ children, className = '' }: { align?: 'sta
   return (
     <>
       <button type="button" className="fixed inset-0 z-30" onClick={() => setOpen(false)} aria-label="Close menu" />
-      <div className={`absolute right-2 top-12 z-40 min-w-44 rounded-md border border-border bg-popover p-1 text-popover-foreground shadow-lg ${className}`}>
-        {children}
+      <div className={`absolute right-0 top-full mt-1 z-40 min-w-48 rounded-lg border border-border bg-card shadow-lg animate-in fade-in-0 zoom-in-95 duration-200 ${className}`}>
+        <div className="p-1">{children}</div>
       </div>
     </>
   );
@@ -59,7 +59,7 @@ export function DropdownMenuItem({ children, onClick, className = '', asChild }:
   if (asChild && children && typeof children === 'object' && 'props' in children) {
     const child = children as ReactElement<{ className?: string; onClick?: () => void }>;
     return cloneElement(child, {
-      className: `${child.props.className ?? ''} flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-muted ${className}`.trim(),
+      className: `${child.props.className ?? ''} flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-muted transition-colors duration-150 ${className}`.trim(),
       onClick: () => {
         child.props.onClick?.();
         onClick?.();
@@ -71,7 +71,7 @@ export function DropdownMenuItem({ children, onClick, className = '', asChild }:
   return (
     <button
       type="button"
-      className={`flex w-full items-center rounded-sm px-2 py-1.5 text-sm hover:bg-muted ${className}`}
+      className={`flex w-full items-center rounded-md px-2 py-2 text-sm hover:bg-muted transition-colors duration-150 ${className}`}
       onClick={() => {
         onClick?.();
         setOpen(false);
@@ -83,5 +83,5 @@ export function DropdownMenuItem({ children, onClick, className = '', asChild }:
 }
 
 export function DropdownMenuSeparator() {
-  return <div className="my-1 h-px bg-border" />;
+  return <div className="my-1.5 h-px bg-border/50" />;
 }

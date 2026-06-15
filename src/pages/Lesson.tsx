@@ -144,11 +144,11 @@ export default function Lesson() {
                         <button
                           key={oi}
                           onClick={() => !quizSubmitted && setQuizAnswers(prev => ({ ...prev, [qi]: oi }))}
-                          className={`p-3 rounded-lg border text-left text-sm transition-all ${
+                          className={`p-3 rounded-lg border text-left text-sm font-medium transition-all cursor-pointer ${quizSubmitted ? 'cursor-default' : 'hover:border-blue-500/50'} ${
                             isCorrect ? 'border-green-500 bg-green-500/10 text-green-700 dark:text-green-400' :
-                            isWrong ? 'border-destructive bg-destructive/10' :
-                            isSelected ? 'border-primary bg-primary/10' :
-                            'border-border hover:border-primary/50'
+                            isWrong ? 'border-red-500 bg-red-500/10 text-red-700 dark:text-red-400' :
+                            isSelected ? 'border-blue-500 bg-blue-500/10 text-blue-700 dark:text-blue-400' :
+                            'border-border text-foreground'
                           }`}
                         >
                           {opt}

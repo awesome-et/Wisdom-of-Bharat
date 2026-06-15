@@ -39,10 +39,12 @@ export function SheetContent({ side = 'right', className = '', children }: { sid
 
   if (!open) return null;
 
+  const slideClass = side === 'left' ? 'animate-in slide-in-from-left-full' : 'animate-in slide-in-from-right-full';
+
   return (
     <>
-      <button type="button" className="fixed inset-0 z-40 bg-black/40" onClick={() => onOpenChange?.(false)} aria-label="Close sheet" />
-      <div className={`fixed top-0 z-50 h-full w-80 max-w-[90vw] bg-card p-4 shadow-xl ${side === 'left' ? 'left-0' : 'right-0'} ${className}`}>
+      <button type="button" className="fixed inset-0 z-40 bg-black/50 animate-in fade-in duration-200" onClick={() => onOpenChange?.(false)} aria-label="Close sheet" />
+      <div className={`fixed top-0 z-50 h-full w-80 max-w-[90vw] bg-card shadow-xl ${slideClass} duration-300 ${side === 'left' ? 'left-0' : 'right-0'} ${className}`}>
         {children}
       </div>
     </>
