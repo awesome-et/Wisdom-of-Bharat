@@ -12,7 +12,7 @@
 
 1. Go to Project Settings → API
 2. Copy **Project URL** and paste it as `VITE_SUPABASE_URL` in `.env.local`
-3. Copy **anon public** key and paste it as `VITE_SUPABASE_ANON_KEY` in `.env.local`
+3. Copy **anon public** key and paste it as `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`
 4. Create `.env.local` file (copy from `.env.example`)
 
 ## 3. Create Database Tables
