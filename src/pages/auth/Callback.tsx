@@ -2,9 +2,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
+import { useAuth } from '@/lib/auth-supabase'; // Connect to your custom provider
 
 export default function AuthCallback() {
   const navigate = useNavigate();
+  const { user, isLoading } = useAuth(); // Read your global user state
 
   useEffect(() => {
     let cancelled = false;
@@ -25,29 +27,16 @@ export default function AuthCallback() {
       }
 
       if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (error) {
-          navigate('/auth/login?error=oauth', { replace: true });
+        try {
+          const { error } = await supabase.auth.exchangeCodeForSession(code);
+          if (error) throw error;
+          // The exchange succeeded! The auth-supabase.tsx listener will now 
+          // automatically pick up the session change in the background.
+        } catch (err) {
+          console.error('PKCE code exchange error:', err);
+          if (!cancelled) navigate('/auth/login?error=oauth', { replace: true });
           return;
         }
-      }
-
-      const start = Date.now();
-      while (!cancelled && Date.now() - start < 5000) {
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
-
-        if (session) {
-          navigate('/library', { replace: true });
-          return;
-        }
-
-        await new Promise((resolve) => setTimeout(resolve, 250));
-      }
-
-      if (!cancelled) {
-        navigate('/auth/login?error=session', { replace: true });
       }
     };
 
@@ -57,6 +46,19 @@ export default function AuthCallback() {
       cancelled = true;
     };
   }, [navigate]);
+
+  // Watch your global auth context state. Once the user profile is ready, route away.
+  useEffect(() => {
+    if (!isLoading) {
+      if (user) {
+        // Safe redirect to your correct application landing route
+        navigate('/dashboard', { replace: true });
+      } else {
+        // If loading finished but no user structure exists, time out to login
+        navigate('/auth/login?error=session', { replace: true });
+      }
+    }
+  }, [user, isLoading, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
