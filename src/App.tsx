@@ -15,6 +15,7 @@ import AdminLayout from '@/pages/admin/AdminLayout';
 import AdminDashboard from '@/pages/admin/AdminDashboard';
 import AdminLessons from '@/pages/admin/AdminLessons';
 import AdminPlaceholder from '@/pages/admin/AdminPlaceholder';
+import { PWAUpdatePrompt } from '@/components/PWAUpdatePrompt';
 
 function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -54,6 +55,7 @@ export default function App() {
           </Route>
         </Routes>
         <Toaster />
+        <PWAUpdatePrompt />
       </BrowserRouter>
     </ThemeProvider>
   );

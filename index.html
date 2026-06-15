@@ -4,10 +4,58 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>my-wisdom-app</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#e8543e" />
+    <meta name="description" content="Learn leadership, confidence, discipline, ethics, and life skills through timeless stories from Indian epics and wisdom traditions" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Wisdom" />
+    <link rel="apple-touch-icon" href="/icon-192.png" />
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json" />
+    
+    <title>Wisdom of Bharat</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      // Register Service Worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js', { scope: '/' })
+            .then((reg) => {
+              console.log('✓ Service Worker registered:', reg);
+              // Check for updates periodically
+              setInterval(() => {
+                reg.update().catch(() => {
+                  // Silently handle update check errors
+                });
+              }, 60000); // Check every 60 seconds
+            })
+            .catch((err) => {
+              console.warn('✗ Service Worker registration failed:', err);
+            });
+        });
+      }
+      
+      // Detect install prompt for add-to-home-screen
+      let deferredPrompt = null;
+      window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        // You can now show an install button if desired
+        console.log('✓ Install prompt available');
+      });
+      
+      // Listen for app installed
+      window.addEventListener('appinstalled', () => {
+        console.log('✓ App successfully installed');
+        deferredPrompt = null;
+      });
+    </script>
   </body>
 </html>
