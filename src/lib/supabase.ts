@@ -1,13 +1,31 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+const viteEnv = import.meta.env as Record<string, string | undefined>;
+const nodeEnv = (globalThis as typeof globalThis & {
+  process?: { env?: Record<string, string | undefined> };
+}).process?.env;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables. Please add VITE_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY to .env.local');
+const supabaseUrl =
+  viteEnv.VITE_SUPABASE_URL ??
+  nodeEnv?.NEXT_PUBLIC_SUPABASE_URL ??
+  nodeEnv?.VITE_SUPABASE_URL;
+
+const supabaseAnonKey =
+  viteEnv.VITE_SUPABASE_ANON_KEY ??
+  nodeEnv?.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+  nodeEnv?.VITE_SUPABASE_ANON_KEY;
+
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+
+export function getSupabaseClient() {
+  if (!isSupabaseConfigured) {
+    return null;
+  }
+
+  return createClient(supabaseUrl!, supabaseAnonKey!);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = getSupabaseClient();
 
 // Type definitions for database
 export type Database = {
