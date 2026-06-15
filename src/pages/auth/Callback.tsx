@@ -6,8 +6,13 @@ export default function AuthCallback() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Force immediate navigation to the landing page, bypassing background polling
-    navigate('/', { replace: true });
+    // Set a 5-second timer to give Supabase time to process and save the session tokens
+    const timer = setTimeout(() => {
+      navigate('/', { replace: true });
+    }, 5000); // 5000 milliseconds = 5 seconds
+
+    // Clean up the timer if the component unmounts prematurely
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   return (
