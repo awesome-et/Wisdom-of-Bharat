@@ -2,11 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
-import { useAuth } from '@/lib/auth-supabase';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
-  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     let cancelled = false;
@@ -26,14 +24,25 @@ export default function AuthCallback() {
         return;
       }
 
-      if (code) {
-        try {
-          const { error } = await supabase.auth.exchangeCodeForSession(code);
-          if (error) throw error;
-        } catch (err) {
-          console.error('PKCE code exchange error:', err);
-          if (!cancelled) navigate('/auth/login?error=oauth', { replace: true });
-          return;
+      try {
+        if (code) {
+          // 1. Exchange the PKCE code for a session
+          const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (exchangeError) throw exchangeError;
+        }
+
+        // 2. Immediately read the newly established session directly
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError || !session) throw sessionError || new Error('No session established');
+
+        // 3. Force navigation directly now that the session is active in storage
+        if (!cancelled) {
+          navigate('/', { replace: true });
+        }
+      } catch (err) {
+        console.error('OAuth callback lifecycle failed:', err);
+        if (!cancelled) {
+          navigate('/auth/login?error=session', { replace: true });
         }
       }
     };
@@ -44,17 +53,6 @@ export default function AuthCallback() {
       cancelled = true;
     };
   }, [navigate]);
-
-  // Monitor global auth context state. Route home as soon as user profile resolves.
-  useEffect(() => {
-    if (!isLoading) {
-      if (user) {
-        navigate('/', { replace: true });
-      } else {
-        navigate('/auth/login?error=session', { replace: true });
-      }
-    }
-  }, [user, isLoading, navigate]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
