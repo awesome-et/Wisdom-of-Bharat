@@ -105,7 +105,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-
   // Initialize auth session
   useEffect(() => {
     const client = supabase;
@@ -137,10 +136,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initializeAuth();
 
     // Listen for auth state changes
-    if (!client) {
-      return;
-    }
-
     const {
       data: { subscription },
     } = client.auth.onAuthStateChange(async (event, currentSession) => {
@@ -149,18 +144,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
         if (currentSession?.user) {
           try {
-            // Wrap profile operations securely so db errors don't crash the session hook
+            // We await the profile creation so the app doesn't route away prematurely
             const profile = await createOrUpdateProfile(currentSession.user);
             setUser(profile);
           } catch (profileError) {
-            console.error('Auth state changed but profile processing failed:', profileError);
-            // Fallback: Set basic user data from metadata so the user isn't stuck out
+            console.error('Profile synchronization failed:', profileError);
+            // Fallback so the user isn't kicked out to the login screen
             setUser({
               id: currentSession.user.id,
               email: currentSession.user.email || '',
-              fullName: currentSession.user.user_metadata?.full_name || null,
+              fullName: currentSession.user.user_metadata?.full_name || currentSession.user.user_metadata?.name || null,
               avatarUrl: currentSession.user.user_metadata?.avatar_url || null,
-              bio: null
+              bio: null,
             });
           }
         }
