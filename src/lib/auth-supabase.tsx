@@ -1,9 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-<<<<<<< Updated upstream
-import { supabase, isSupabaseConfigured } from './supabase';
-=======
 import { isSupabaseConfigured, supabase } from './supabase';
->>>>>>> Stashed changes
 import type { Session, User as SupabaseUser } from '@supabase/supabase-js';
 
 export type AuthUser = {
