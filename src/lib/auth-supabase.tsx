@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
-import { isSupabaseConfigured, supabase } from './supabase';
+import { getAuthCallbackUrl, isSupabaseConfigured, supabase } from './supabase';
 import type { Session, User as SupabaseUser } from '@supabase/supabase-js';
 
 export type AuthUser = {
@@ -197,10 +197,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       throw new Error('Supabase is not configured');
     }
 
+    const redirectTo = getAuthCallbackUrl();
+    if (!redirectTo) {
+      throw new Error('Unable to determine OAuth callback URL');
+    }
+
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: `${window.location.origin}/auth/callback`,
+        redirectTo,
       },
     });
 

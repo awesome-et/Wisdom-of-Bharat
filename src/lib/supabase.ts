@@ -37,6 +37,13 @@ const supabaseAnonKey = pickFirst(
   runtimeEnv?.SUPABASE_ANON_KEY,
 );
 
+const appBaseUrl = pickFirst(
+  viteEnv.VITE_APP_URL,
+  viteEnv.NEXT_PUBLIC_APP_URL,
+  runtimeEnv?.VITE_APP_URL,
+  runtimeEnv?.NEXT_PUBLIC_APP_URL,
+);
+
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 export const supabaseConfigSource =
   viteEnv.VITE_SUPABASE_URL ? 'vite' :
@@ -45,12 +52,25 @@ export const supabaseConfigSource =
   runtimeEnv?.SUPABASE_URL ? 'supabase-runtime-env' :
   'missing';
 
+export function getAuthCallbackUrl() {
+  const base = appBaseUrl || (typeof window !== 'undefined' ? window.location.origin : undefined);
+  if (!base) return undefined;
+  return `${base.replace(/\/$/, '')}/auth/callback`;
+}
+
 export function getSupabaseClient() {
   if (!isSupabaseConfigured) {
     return null;
   }
 
-  return createClient(supabaseUrl!, supabaseAnonKey!);
+  return createClient(supabaseUrl!, supabaseAnonKey!, {
+    auth: {
+      flowType: 'pkce',
+      detectSessionInUrl: true,
+      persistSession: true,
+      autoRefreshToken: true,
+    },
+  });
 }
 
 export const supabase = getSupabaseClient();

@@ -11,8 +11,11 @@
 ## 2. Get Your API Keys
 
 1. Go to Project Settings → API
-2. Copy **Project URL** and paste it as `VITE_SUPABASE_URL` in `.env.local`
+2. Copy **Project URL** and paste it as `NEXT_PUBLIC_SUPABASE_URL` in `.env.local`
 3. Copy **anon public** key and paste it as `NEXT_PUBLIC_SUPABASE_ANON_KEY` in `.env.local`
+4. Set `NEXT_PUBLIC_APP_URL` to your current app base URL:
+  - local: `http://localhost:5173`
+  - production: `https://wisdom-of-bharat.vercel.app`
 4. Create `.env.local` file (copy from `.env.example`)
 
 ## 3. Create Database Tables
@@ -94,9 +97,19 @@ CREATE POLICY "Users can update own progress"
 ## 5. Configure Auth Redirect URLs
 
 Go to Authentication → URL Configuration and add:
-- **Redirect URLs**: 
-  - `http://localhost:5173/auth/callback` (development)
-  - `https://your-domain.com/auth/callback` (production)
+- **Site URL**:
+  - `https://wisdom-of-bharat.vercel.app`
+- **Redirect URLs**:
+  - `http://localhost:5173/auth/callback`
+  - `https://wisdom-of-bharat.vercel.app/auth/callback`
+  - `http://localhost:5173`
+  - `https://wisdom-of-bharat.vercel.app`
+  - Any preview deployment callback URLs you use, for example:
+    - `https://<your-preview-domain>.vercel.app/auth/callback`
+
+Important:
+- If local auth redirects to production, check `NEXT_PUBLIC_APP_URL` in local `.env.local` and set it to `http://localhost:5173`.
+- After changing env vars in Vercel/V0, redeploy the app.
 
 ## 6. Update Landing Page (Optional)
 
@@ -124,6 +137,29 @@ Update the Landing page to redirect auth buttons to `/auth/login`:
 ### "Google sign-in not working"
 - Verify redirect URLs are correct in Google Cloud Console
 - Check that Google provider is enabled in Supabase
+
+### Google Cloud Console exact values (double-check)
+- OAuth Client → **Authorized redirect URIs**:
+  - `https://mdgvmnshpkrwpguqnvbe.supabase.co/auth/v1/callback`
+- OAuth Client → **Authorized JavaScript origins**:
+  - `http://localhost:5173`
+  - `https://wisdom-of-bharat.vercel.app`
+  - (optional) your active preview domain(s)
+
+### "error_code=bad_oauth_state"
+- This is usually a provider state mismatch, not an app code bug.
+- In Supabase Authentication > URL Configuration:
+  - Set Site URL exactly to your deployed app URL (for example: https://wisdom-of-bharat.vercel.app)
+  - Add Redirect URLs for every environment you use:
+    - https://wisdom-of-bharat.vercel.app/auth/callback
+    - https://wisdom-of-bharat.vercel.app
+    - your preview deployment callback URL(s)
+- In Google Cloud OAuth client:
+  - Authorized redirect URI must be only: https://<your-supabase-project-ref>.supabase.co/auth/v1/callback
+  - Add your app domains under Authorized JavaScript origins
+- Retry in a fresh private/incognito window to clear stale OAuth state.
+- Avoid opening login flow in one tab and completing in another tab.
+- If tokens were exposed in logs or chat, revoke existing sessions and retry.
 
 ### Database query errors
 - Make sure tables were created successfully
