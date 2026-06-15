@@ -1,21 +1,25 @@
 import { createClient } from '@supabase/supabase-js';
 
+declare const process:
+  | {
+      env: Record<string, string | undefined>;
+    }
+  | undefined;
+
 const viteEnv = import.meta.env as Record<string, string | undefined>;
-const nodeEnv = (globalThis as typeof globalThis & {
-  process?: { env?: Record<string, string | undefined> };
-}).process?.env;
+const nextPublicSupabaseUrl = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_SUPABASE_URL : undefined;
+const nextPublicSupabaseAnonKey = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY : undefined;
 
 const supabaseUrl =
   viteEnv.VITE_SUPABASE_URL ??
-  nodeEnv?.NEXT_PUBLIC_SUPABASE_URL ??
-  nodeEnv?.VITE_SUPABASE_URL;
+  nextPublicSupabaseUrl;
 
 const supabaseAnonKey =
   viteEnv.VITE_SUPABASE_ANON_KEY ??
-  nodeEnv?.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-  nodeEnv?.VITE_SUPABASE_ANON_KEY;
+  nextPublicSupabaseAnonKey;
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
+export const supabaseConfigSource = viteEnv.VITE_SUPABASE_URL ? 'vite' : nextPublicSupabaseUrl ? 'next-public' : 'missing';
 
 export function getSupabaseClient() {
   if (!isSupabaseConfigured) {
