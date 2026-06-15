@@ -47,14 +47,15 @@ export default function AuthCallback() {
     };
   }, [navigate]);
 
-  // Watch your global auth context state. Once the user profile is ready, route away.
+  // CRUCIAL MISSING BLOCK: Watch your global auth context state. 
+  // Once the user profile is ready, instantly route away.
   useEffect(() => {
     if (!isLoading) {
       if (user) {
-        // Safe redirect to your correct application landing route
-        navigate('/dashboard', { replace: true });
+        // Redirect to your main landing layout route
+        navigate('/', { replace: true }); 
       } else {
-        // If loading finished but no user structure exists, time out to login
+        // If loading finished but no user structure exists, timeout back to login
         navigate('/auth/login?error=session', { replace: true });
       }
     }
