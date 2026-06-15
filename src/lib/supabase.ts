@@ -2,8 +2,8 @@ import { createClient } from '@supabase/supabase-js';
 
 declare const process:
   | {
-      env: Record<string, string | undefined>;
-    }
+    env: Record<string, string | undefined>;
+  }
   | undefined;
 
 const viteEnv = import.meta.env as Record<string, string | undefined>;
@@ -47,10 +47,10 @@ const appBaseUrl = pickFirst(
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 export const supabaseConfigSource =
   viteEnv.VITE_SUPABASE_URL ? 'vite' :
-  viteEnv.NEXT_PUBLIC_SUPABASE_URL ? 'next-public-vite-env' :
-  runtimeEnv?.NEXT_PUBLIC_SUPABASE_URL ? 'next-public-process-env' :
-  runtimeEnv?.SUPABASE_URL ? 'supabase-runtime-env' :
-  'missing';
+    viteEnv.NEXT_PUBLIC_SUPABASE_URL ? 'next-public-vite-env' :
+      runtimeEnv?.NEXT_PUBLIC_SUPABASE_URL ? 'next-public-process-env' :
+        runtimeEnv?.SUPABASE_URL ? 'supabase-runtime-env' :
+          'missing';
 
 export function getAuthCallbackUrl() {
   const base = appBaseUrl || (typeof window !== 'undefined' ? window.location.origin : undefined);
@@ -65,7 +65,7 @@ export function getSupabaseClient() {
 
   return createClient(supabaseUrl!, supabaseAnonKey!, {
     auth: {
-      flowType: 'pkce',
+      flowType: 'implicit', // Changed from 'pkce' to 'implicit'
       detectSessionInUrl: true,
       persistSession: true,
       autoRefreshToken: true,
