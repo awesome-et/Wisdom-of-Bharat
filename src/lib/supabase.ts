@@ -1,32 +1,31 @@
 import { createClient } from '@supabase/supabase-js';
 
-const env = globalThis as typeof globalThis & {
-  import?: { meta?: { env?: Record<string, string | undefined> } };
+const viteEnv = import.meta.env as Record<string, string | undefined>;
+const nodeEnv = (globalThis as typeof globalThis & {
   process?: { env?: Record<string, string | undefined> };
-};
+}).process?.env;
 
 const supabaseUrl =
-  env.import?.meta?.env?.VITE_SUPABASE_URL ??
-  env.process?.env?.NEXT_PUBLIC_SUPABASE_URL ??
-  env.process?.env?.VITE_SUPABASE_URL;
+  viteEnv.VITE_SUPABASE_URL ??
+  nodeEnv?.NEXT_PUBLIC_SUPABASE_URL ??
+  nodeEnv?.VITE_SUPABASE_URL;
 
 const supabaseAnonKey =
-  env.import?.meta?.env?.VITE_SUPABASE_ANON_KEY ??
-  env.process?.env?.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
-  env.process?.env?.VITE_SUPABASE_ANON_KEY;
+  viteEnv.VITE_SUPABASE_ANON_KEY ??
+  nodeEnv?.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
+  nodeEnv?.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  const missing = [
-    !supabaseUrl ? 'SUPABASE_URL' : null,
-    !supabaseAnonKey ? 'SUPABASE_ANON_KEY' : null,
-  ].filter(Boolean).join(' and ');
+export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
 
-  throw new Error(
-    `Missing Supabase environment variables (${missing}). Set VITE_SUPABASE_URL/VITE_SUPABASE_ANON_KEY for Vite or NEXT_PUBLIC_SUPABASE_URL/NEXT_PUBLIC_SUPABASE_ANON_KEY for Next.js/V0.`
-  );
+export function getSupabaseClient() {
+  if (!isSupabaseConfigured) {
+    return null;
+  }
+
+  return createClient(supabaseUrl!, supabaseAnonKey!);
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = getSupabaseClient();
 
 // Type definitions for database
 export type Database = {
