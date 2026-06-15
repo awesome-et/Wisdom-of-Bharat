@@ -148,8 +148,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (event === 'SIGNED_IN' || event === 'USER_UPDATED') {
         if (currentSession?.user) {
-          const profile = await createOrUpdateProfile(currentSession.user);
-          setUser(profile);
+          try {
+            // Wrap profile operations securely so db errors don't crash the session hook
+            const profile = await createOrUpdateProfile(currentSession.user);
+            setUser(profile);
+          } catch (profileError) {
+            console.error('Auth state changed but profile processing failed:', profileError);
+            // Fallback: Set basic user data from metadata so the user isn't stuck out
+            setUser({
+              id: currentSession.user.id,
+              email: currentSession.user.email || '',
+              fullName: currentSession.user.user_metadata?.full_name || null,
+              avatarUrl: currentSession.user.user_metadata?.avatar_url || null,
+              bio: null
+            });
+          }
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
@@ -240,9 +253,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser((prev) =>
       prev
         ? {
-            ...prev,
-            ...updates,
-          }
+          ...prev,
+          ...updates,
+        }
         : null
     );
   };
