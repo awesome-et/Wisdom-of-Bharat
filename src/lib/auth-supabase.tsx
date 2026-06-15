@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+<<<<<<< Updated upstream
 import { supabase, isSupabaseConfigured } from './supabase';
+=======
+import { isSupabaseConfigured, supabase } from './supabase';
+>>>>>>> Stashed changes
 import type { Session, User as SupabaseUser } from '@supabase/supabase-js';
 
 export type AuthUser = {
@@ -24,7 +28,13 @@ export type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 async function fetchUserProfile(userId: string): Promise<AuthUser | null> {
+<<<<<<< Updated upstream
   if (!supabase) return null;
+=======
+  if (!supabase) {
+    return null;
+  }
+>>>>>>> Stashed changes
 
   const { data, error } = await supabase
     .from('profiles')
@@ -135,7 +145,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     initializeAuth();
 
     // Listen for auth state changes
+<<<<<<< Updated upstream
     if (!client) return;
+=======
+    if (!client) {
+      return;
+    }
+>>>>>>> Stashed changes
 
     const {
       data: { subscription },
@@ -158,7 +174,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
+<<<<<<< Updated upstream
     if (!supabase) throw new Error('Supabase is not configured');
+=======
+    if (!supabase) {
+      throw new Error('Supabase is not configured');
+    }
+>>>>>>> Stashed changes
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -174,7 +196,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+<<<<<<< Updated upstream
     if (!supabase) throw new Error('Supabase is not configured');
+=======
+    if (!supabase) {
+      throw new Error('Supabase is not configured');
+    }
+>>>>>>> Stashed changes
 
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -185,7 +213,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signInWithGoogle = async () => {
+<<<<<<< Updated upstream
     if (!supabase) throw new Error('Supabase is not configured');
+=======
+    if (!supabase) {
+      throw new Error('Supabase is not configured');
+    }
+>>>>>>> Stashed changes
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -198,7 +232,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+<<<<<<< Updated upstream
     if (!supabase) throw new Error('Supabase is not configured');
+=======
+    if (!supabase) {
+      throw new Error('Supabase is not configured');
+    }
+>>>>>>> Stashed changes
 
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
@@ -206,7 +246,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const updateProfile = async (updates: Partial<AuthUser>) => {
+<<<<<<< Updated upstream
     if (!supabase) throw new Error('Supabase is not configured');
+=======
+    if (!supabase) {
+      throw new Error('Supabase is not configured');
+    }
+>>>>>>> Stashed changes
 
     if (!user) throw new Error('No user logged in');
 
