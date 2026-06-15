@@ -7,19 +7,43 @@ declare const process:
   | undefined;
 
 const viteEnv = import.meta.env as Record<string, string | undefined>;
-const nextPublicSupabaseUrl = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_SUPABASE_URL : undefined;
-const nextPublicSupabaseAnonKey = typeof process !== 'undefined' ? process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY : undefined;
+const runtimeEnv = typeof process !== 'undefined' ? process.env : undefined;
 
-const supabaseUrl =
-  viteEnv.VITE_SUPABASE_URL ??
-  nextPublicSupabaseUrl;
+function pickFirst(...values: Array<string | undefined>) {
+  for (const value of values) {
+    if (typeof value === 'string' && value.trim().length > 0) {
+      return value.trim();
+    }
+  }
+  return undefined;
+}
 
-const supabaseAnonKey =
-  viteEnv.VITE_SUPABASE_ANON_KEY ??
-  nextPublicSupabaseAnonKey;
+// Support common env naming used by Vite, Next.js/V0, and Supabase integrations.
+const supabaseUrl = pickFirst(
+  viteEnv.VITE_SUPABASE_URL,
+  viteEnv.NEXT_PUBLIC_SUPABASE_URL,
+  viteEnv.SUPABASE_URL,
+  runtimeEnv?.NEXT_PUBLIC_SUPABASE_URL,
+  runtimeEnv?.VITE_SUPABASE_URL,
+  runtimeEnv?.SUPABASE_URL,
+);
+
+const supabaseAnonKey = pickFirst(
+  viteEnv.VITE_SUPABASE_ANON_KEY,
+  viteEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  viteEnv.SUPABASE_ANON_KEY,
+  runtimeEnv?.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  runtimeEnv?.VITE_SUPABASE_ANON_KEY,
+  runtimeEnv?.SUPABASE_ANON_KEY,
+);
 
 export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey);
-export const supabaseConfigSource = viteEnv.VITE_SUPABASE_URL ? 'vite' : nextPublicSupabaseUrl ? 'next-public' : 'missing';
+export const supabaseConfigSource =
+  viteEnv.VITE_SUPABASE_URL ? 'vite' :
+  viteEnv.NEXT_PUBLIC_SUPABASE_URL ? 'next-public-vite-env' :
+  runtimeEnv?.NEXT_PUBLIC_SUPABASE_URL ? 'next-public-process-env' :
+  runtimeEnv?.SUPABASE_URL ? 'supabase-runtime-env' :
+  'missing';
 
 export function getSupabaseClient() {
   if (!isSupabaseConfigured) {
