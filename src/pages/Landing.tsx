@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { categories, wisdomPaths, testimonials, sampleLessons } from '@/lib/mock-data';
-import { useAuth } from '@/lib/auth';
+import { useAuth } from '@/lib/auth-supabase';
 import { motion } from 'framer-motion';
 import { ArrowRight, BookOpen, Brain, Target, Trophy, CheckCircle, Star, Sparkles, Clock, ChevronLeft, ChevronRight, LogIn } from 'lucide-react';
 import { useMemo, useState } from 'react';
@@ -31,7 +31,8 @@ function formatTime(minutes: number) {
 
 function LandingNav() {
   const { theme, toggle } = useTheme();
-  const { user, loginWithRedirect } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const links = [
   { label: 'Categories', href: '#categories' },
@@ -68,10 +69,10 @@ function LandingNav() {
             </Link> :
 
           <>
-              <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => loginWithRedirect()}>
+              <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => navigate('/auth/login')}>
                 <LogIn className="w-4 h-4 mr-1" /> Log in
               </Button>
-              <Button size="sm" className="hidden md:inline-flex" onClick={() => loginWithRedirect({ initialView: 'signup' })}>
+              <Button size="sm" className="hidden md:inline-flex" onClick={() => navigate('/auth/login')}>
                 Start Learning
               </Button>
             </>
@@ -83,7 +84,8 @@ function LandingNav() {
 }
 
 function Hero() {
-  const { user, loginWithRedirect } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   return (
     <section className="relative overflow-hidden py-20 md:py-32">
       <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-transparent" />
@@ -110,10 +112,10 @@ function Hero() {
               </Link> :
 
             <>
-                <Button size="lg" className="text-base px-8 h-12 w-full sm:w-auto" onClick={() => loginWithRedirect({ initialView: 'signup' })}>
+                <Button size="lg" className="text-base px-8 h-12 w-full sm:w-auto" onClick={() => navigate('/auth/login')}>
                   Start Learning <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-                <Button size="lg" variant="outline" className="text-base px-8 h-12 w-full sm:w-auto" onClick={() => loginWithRedirect()}>
+                <Button size="lg" variant="outline" className="text-base px-8 h-12 w-full sm:w-auto" onClick={() => navigate('/auth/login')}>
                   <LogIn className="mr-2 w-4 h-4" /> Log in
                 </Button>
               </>
@@ -279,7 +281,8 @@ function Testimonials() {
 }
 
 function Pricing() {
-  const { user, loginWithRedirect } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
   return (
     <section id="pricing" className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -301,7 +304,7 @@ function Pricing() {
               {user ?
               <Link to="/library"><Button variant="outline" className="w-full">Go to Library</Button></Link> :
 
-              <Button variant="outline" className="w-full" onClick={() => loginWithRedirect({ initialView: 'signup' })}>Get Started</Button>
+              <Button variant="outline" className="w-full" onClick={() => navigate('/auth/login')}>Get Started</Button>
               }
             </Card>
           </motion.div>
@@ -319,7 +322,7 @@ function Pricing() {
               {user ?
               <Link to="/library"><Button className="w-full">Go to Library</Button></Link> :
 
-              <Button className="w-full" onClick={() => loginWithRedirect({ initialView: 'signup' })}>Start Premium</Button>
+              <Button className="w-full" onClick={() => navigate('/auth/login')}>Start Premium</Button>
               }
             </Card>
           </motion.div>
