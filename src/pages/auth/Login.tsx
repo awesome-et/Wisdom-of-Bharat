@@ -1,12 +1,24 @@
 import { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/lib/auth-supabase';
 import { AuthForm } from '@/components/AuthForm';
 import { BookOpen } from 'lucide-react';
+import { isSupabaseConfigured, supabaseConfigSource } from '@/lib/supabase';
 
 export default function LoginPage() {
   const [mode, setMode] = useState<'login' | 'signup'>('login');
+  const [searchParams] = useSearchParams();
   const { user, isLoading } = useAuth();
+  const authError = searchParams.get('error');
+
+  const errorMessage =
+    authError === 'config'
+      ? 'Supabase is not configured in this deployment. Add NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in V0 project settings, then redeploy.'
+      : authError === 'oauth'
+      ? 'OAuth sign-in failed. Verify Supabase Google provider and exact redirect URLs for this environment.'
+      : authError === 'session'
+      ? 'OAuth completed but session was not created. This usually means callback URL mismatch or blocked third-party cookies.'
+      : null;
 
   if (isLoading) {
     return (
@@ -33,6 +45,16 @@ export default function LoginPage() {
           </h1>
         </div>
         <p className="text-muted-foreground">Learn timeless wisdom from Indian epics</p>
+        {!isSupabaseConfigured && (
+          <p className="mt-3 text-xs text-destructive">
+            Supabase config missing in this deployment (source: {supabaseConfigSource}).
+          </p>
+        )}
+        {errorMessage && (
+          <p className="mt-3 text-xs text-destructive">
+            {errorMessage}
+          </p>
+        )}
       </div>
 
       <AuthForm
