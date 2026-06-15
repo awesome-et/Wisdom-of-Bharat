@@ -2,11 +2,11 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { isSupabaseConfigured, supabase } from '@/lib/supabase';
-import { useAuth } from '@/lib/auth-supabase'; // Connect to your custom provider
+import { useAuth } from '@/lib/auth-supabase';
 
 export default function AuthCallback() {
   const navigate = useNavigate();
-  const { user, isLoading } = useAuth(); // Read your global user state
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     let cancelled = false;
@@ -30,8 +30,6 @@ export default function AuthCallback() {
         try {
           const { error } = await supabase.auth.exchangeCodeForSession(code);
           if (error) throw error;
-          // The exchange succeeded! The auth-supabase.tsx listener will now 
-          // automatically pick up the session change in the background.
         } catch (err) {
           console.error('PKCE code exchange error:', err);
           if (!cancelled) navigate('/auth/login?error=oauth', { replace: true });
@@ -47,15 +45,12 @@ export default function AuthCallback() {
     };
   }, [navigate]);
 
-  // CRUCIAL MISSING BLOCK: Watch your global auth context state. 
-  // Once the user profile is ready, instantly route away.
+  // Monitor global auth context state. Route home as soon as user profile resolves.
   useEffect(() => {
     if (!isLoading) {
       if (user) {
-        // Redirect to your main landing layout route
-        navigate('/', { replace: true }); 
+        navigate('/', { replace: true });
       } else {
-        // If loading finished but no user structure exists, timeout back to login
         navigate('/auth/login?error=session', { replace: true });
       }
     }
