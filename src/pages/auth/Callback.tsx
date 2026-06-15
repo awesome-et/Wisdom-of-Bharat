@@ -1,19 +1,18 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 
 export default function AuthCallback() {
-  const navigate = useNavigate();
-
   useEffect(() => {
-    // Set a 5-second timer to give Supabase time to process and save the session tokens
+    // 1. Give Supabase 5 seconds to write the session tokens to storage
     const timer = setTimeout(() => {
-      navigate('/', { replace: true });
-    }, 5000); // 5000 milliseconds = 5 seconds
+      // 2. Force a hard browser redirect instead of a client-side navigation.
+      // This wipes out the query code parameters and forces your global 
+      // AuthProvider to cleanly initialize and pick up the login state.
+      window.location.href = '/';
+    }, 3000);
 
-    // Clean up the timer if the component unmounts prematurely
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background">
