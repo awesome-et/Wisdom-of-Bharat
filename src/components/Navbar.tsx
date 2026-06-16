@@ -128,12 +128,13 @@ export default function Navbar() {
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                {/* Fix: Swapped bg-card out for a solid bg-background layer 
-                  and added a crisp backdrop blur to filter out structural noise beneath it
+
+                {/* FIX: We use explicit, non-variable solid color utilities (bg-white dark:bg-neutral-950)
+                  to completely block background bleed-through, combined with an explicit opaque border.
                 */}
                 <SheetContent
                   side="right"
-                  className="w-72 z-50 bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl p-6 text-foreground"
+                  className="w-72 z-50 bg-white dark:bg-neutral-950 border-l border-neutral-200 dark:border-neutral-800 shadow-2xl p-6 text-foreground"
                 >
                   <div className="flex flex-col gap-5 mt-8">
                     {links.map(l => (
@@ -148,14 +149,14 @@ export default function Navbar() {
                     ))}
 
                     {/* User Profile Info Card Container */}
-                    <div className="bg-muted/80 border border-border/60 p-4 rounded-xl mt-2 shadow-sm">
+                    <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-4 rounded-xl mt-2 shadow-sm">
                       <p className="text-sm font-semibold text-foreground tracking-tight">{getUserDisplayName()}</p>
                       <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
                     </div>
 
                     <div className="flex flex-col gap-3 mt-4">
                       <Link to="/profile" onClick={() => setOpen(false)} className="w-full">
-                        <Button variant="outline" className="w-full justify-start h-11 bg-card hover:bg-muted border-border/80">
+                        <Button variant="outline" className="w-full justify-start h-11 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 border-neutral-200 dark:border-neutral-800">
                           <User className="w-4 h-4 mr-2 text-muted-foreground" /> Profile & Settings
                         </Button>
                       </Link>
