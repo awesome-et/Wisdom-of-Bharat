@@ -127,78 +127,114 @@ export default function Navbar() {
                     <Menu className="w-5 h-5 text-foreground" />
                   </Button>
                 </SheetTrigger>
-
                 <SheetContent
                   side="right"
-                  className="w-80 z-50 bg-white dark:bg-zinc-950 border-l border-zinc-200 dark:border-zinc-800 p-0 text-foreground flex flex-col h-full shadow-2xl"
+                  className="w-[320px] sm:w-[380px] p-0 flex flex-col bg-background"
                 >
-                  {/* Drawer Header Area */}
-                  <div className="p-6 border-b border-zinc-100 dark:border-zinc-900 flex items-center justify-between">
-                    <div className="flex items-center gap-2 font-serif text-lg font-bold">
-                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
-                        <BookOpen className="w-4 h-4 text-primary-foreground" />
+                  {/* Header */}
+                  <div className="border-b px-5 py-4">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
+                        <BookOpen className="w-5 h-5 text-primary-foreground" />
                       </div>
-                      <span>Wisdom Of <span className="text-primary">Bharat</span></span>
+
+                      <div className="min-w-0">
+                        <h2 className="font-semibold text-lg truncate">
+                          Wisdom Of <span className="text-primary">Bharat</span>
+                        </h2>
+                      </div>
                     </div>
                   </div>
 
-                  {/* Scrollable Navigation Body */}
-                  <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                    <div className="space-y-1">
-                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">Navigation</p>
-                      {links.map(l => (
+                  {/* Body */}
+                  <div className="flex-1 overflow-y-auto px-5 py-5">
+
+                    {/* Navigation */}
+                    <div className="space-y-2">
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
+                        Navigation
+                      </p>
+
+                      {links.map((l) => (
                         <Link
                           key={l.href}
                           to={l.href}
                           onClick={() => setOpen(false)}
-                          className="flex items-center w-full px-3 py-2.5 text-base font-medium text-foreground hover:text-primary hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all"
+                          className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-colors ${location.pathname === l.href
+                            ? "bg-primary text-primary-foreground"
+                            : "hover:bg-muted"
+                            }`}
                         >
-                          {l.label}
+                          <BookOpen className="w-5 h-5" />
+                          <span>{l.label}</span>
                         </Link>
                       ))}
                     </div>
 
-                    {/* User Account Info Module */}
-                    <div className="border border-zinc-100 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/40 p-4 rounded-xl shadow-inner">
-                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Logged In As</p>
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm text-primary-foreground font-bold">
-                          {initials}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-semibold text-foreground truncate leading-tight">{getUserDisplayName()}</p>
-                          <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
+                    {/* User Card */}
+                    <div className="mt-8">
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-3">
+                        Account
+                      </p>
+
+                      <div className="rounded-xl bg-muted p-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold">
+                            {initials}
+                          </div>
+
+                          <div className="min-w-0">
+                            <p className="font-medium truncate">
+                              {getUserDisplayName()}
+                            </p>
+
+                            <p className="text-sm text-muted-foreground truncate">
+                              {user.email}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Fixed Drawer Footer Actions */}
-                  <div className="p-6 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/30 dark:bg-zinc-900/10 space-y-3">
-                    <Link to="/profile" onClick={() => setOpen(false)} className="block w-full">
-                      <Button variant="outline" className="w-full justify-center h-11 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-zinc-200 dark:border-zinc-800 font-medium">
-                        <User className="w-4 h-4 mr-2 text-muted-foreground" /> View Profile & Settings
+                  {/* Footer */}
+                  <div className="border-t p-4 bg-background space-y-2">
+
+                    <Link
+                      to="/profile"
+                      onClick={() => setOpen(false)}
+                      className="block"
+                    >
+                      <Button
+                        className="w-full h-11"
+                      >
+                        <User className="w-4 h-4 mr-2" />
+                        Profile & Settings
                       </Button>
                     </Link>
 
                     <Button
                       variant="destructive"
-                      className={`w-full justify-center h-11 font-medium transition-all shadow-sm ${isSigningOut ? 'opacity-50 pointer-events-none' : ''
-                        }`}
-                      onClick={() => {
-                        if (isSigningOut) return;
-                        handleSignOut();
-                      }}
+                      className="w-full h-11"
+                      disabled={isSigningOut}
+                      onClick={handleSignOut}
                     >
                       {isSigningOut ? (
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Signing out...
+                        </>
                       ) : (
-                        <LogOut className="w-4 h-4 mr-2" />
+                        <>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </>
                       )}
-                      Sign out Account
                     </Button>
+
                   </div>
                 </SheetContent>
+
               </Sheet>
             </>
           )}
