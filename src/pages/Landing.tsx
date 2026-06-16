@@ -35,9 +35,9 @@ function LandingNav() {
   const navigate = useNavigate();
 
   const links = [
-  { label: 'Categories', href: '#categories' },
-  // { label: 'Paths', href: '#paths' },
-  // { label: 'Pricing', href: '#pricing' }
+    { label: 'Categories', href: '#categories' },
+    // { label: 'Paths', href: '#paths' },
+    // { label: 'Pricing', href: '#pricing' }
   ];
 
 
@@ -53,7 +53,7 @@ function LandingNav() {
 
         <nav className="hidden md:flex items-center gap-1">
           {links.map((l) =>
-          <a key={l.href} href={l.href} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md">
+            <a key={l.href} href={l.href} className="px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-md">
               {l.label}
             </a>
           )}
@@ -64,16 +64,12 @@ function LandingNav() {
             {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
           </Button>
           {user ?
-          <Link to="/library">
+            <Link to="/library">
               <Button size="sm">Go to Library <ArrowRight className="w-3 h-3 ml-1" /></Button>
             </Link> :
-
-          <>
+            <>
               <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => navigate('/auth/login')}>
                 <LogIn className="w-4 h-4 mr-1" /> Log in
-              </Button>
-              <Button size="sm" className="hidden md:inline-flex" onClick={() => navigate('/auth/login')}>
-                Start Learning
               </Button>
             </>
           }
@@ -105,18 +101,15 @@ function Hero() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             {user ?
-            <Link to="/library">
+              <Link to="/library">
                 <Button size="lg" className="text-base px-8 h-12 w-full sm:w-auto">
                   Go to Library <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link> :
 
-            <>
+              <>
                 <Button size="lg" className="text-base px-8 h-12 w-full sm:w-auto" onClick={() => navigate('/auth/login')}>
                   Start Learning <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-                <Button size="lg" variant="outline" className="text-base px-8 h-12 w-full sm:w-auto" onClick={() => navigate('/auth/login')}>
-                  <LogIn className="mr-2 w-4 h-4" /> Log in
                 </Button>
               </>
             }
@@ -128,7 +121,7 @@ function Hero() {
           </div>
         </motion.div>
 
-        
+
 
 
 
@@ -142,10 +135,10 @@ function Hero() {
 
 function HowItWorks() {
   const steps = [
-  { icon: <BookOpen className="w-6 h-6" />, title: 'Read engaging stories', desc: 'Dive into captivating tales from Indian epics and traditions.' },
-  { icon: <Brain className="w-6 h-6" />, title: 'Understand the lesson', desc: 'Discover the life skills and values embedded in each story.' },
-  { icon: <Target className="w-6 h-6" />, title: 'Apply it to real life', desc: 'Learn how ancient wisdom solves modern challenges.' },
-  { icon: <Trophy className="w-6 h-6" />, title: 'Earn your progress', desc: 'Complete quizzes, earn badges, and track your growth.' }];
+    { icon: <BookOpen className="w-6 h-6" />, title: 'Read engaging stories', desc: 'Dive into captivating tales from Indian epics and traditions.' },
+    { icon: <Brain className="w-6 h-6" />, title: 'Understand the lesson', desc: 'Discover the life skills and values embedded in each story.' },
+    { icon: <Target className="w-6 h-6" />, title: 'Apply it to real life', desc: 'Learn how ancient wisdom solves modern challenges.' },
+    { icon: <Trophy className="w-6 h-6" />, title: 'Earn your progress', desc: 'Complete quizzes, earn badges, and track your growth.' }];
 
   return (
     <section className="py-20 bg-muted/30">
@@ -156,7 +149,7 @@ function HowItWorks() {
         </motion.div>
         <div className="grid md:grid-cols-4 gap-6 max-w-5xl mx-auto">
           {steps.map((s, i) =>
-          <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.1, duration: 0.5 }}>
+            <motion.div key={i} {...fadeUp} transition={{ delay: i * 0.1, duration: 0.5 }}>
               <Card className="p-6 text-center h-full border-border/50 hover:border-primary/30 transition-colors">
                 <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
                   {s.icon}
@@ -183,7 +176,7 @@ function Categories() {
         </motion.div>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {categories.map((c, i) =>
-          <motion.div key={c.id} {...fadeUp} transition={{ delay: i * 0.05, duration: 0.4 }}>
+            <motion.div key={c.id} {...fadeUp} transition={{ delay: i * 0.05, duration: 0.4 }}>
               <Card className="p-5 hover:shadow-lg transition-all hover:-translate-y-1 cursor-pointer group border-border/50">
                 <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${c.color} flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform`}>
                   {c.emoji}
@@ -216,7 +209,7 @@ function Paths() {
         </motion.div>
         <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
           {wisdomPaths.map((p, i) =>
-          <motion.div key={p.id} {...fadeUp} transition={{ delay: i * 0.1, duration: 0.5 }}>
+            <motion.div key={p.id} {...fadeUp} transition={{ delay: i * 0.1, duration: 0.5 }}>
               <Card className="p-6 hover:shadow-lg transition-all hover:-translate-y-1 border-border/50">
                 <div className="flex items-start gap-4">
                   <div className="text-3xl">{p.icon}</div>
@@ -225,8 +218,8 @@ function Paths() {
                     <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{p.description}</p>
                     <div className="flex flex-wrap gap-1.5 mb-3">
                       {p.characters.map((c) =>
-                    <Badge key={c} variant="secondary" className="text-xs">{c}</Badge>
-                    )}
+                        <Badge key={c} variant="secondary" className="text-xs">{c}</Badge>
+                      )}
                     </div>
                     <div className="flex items-center gap-4 text-xs text-muted-foreground">
                       <span>{p.lessons} lessons</span>
@@ -267,7 +260,7 @@ function Testimonials() {
             </Button>
             <div className="flex items-center gap-1.5">
               {testimonials.map((_, i) =>
-              <button key={i} onClick={() => setIdx(i)} className={`w-2 h-2 rounded-full transition-colors ${i === idx ? 'bg-primary' : 'bg-border'}`} />
+                <button key={i} onClick={() => setIdx(i)} className={`w-2 h-2 rounded-full transition-colors ${i === idx ? 'bg-primary' : 'bg-border'}`} />
               )}
             </div>
             <Button variant="outline" size="icon" className="rounded-full" onClick={() => setIdx((i) => (i + 1) % testimonials.length)}>
@@ -298,13 +291,13 @@ function Pricing() {
               <p className="text-sm text-muted-foreground mb-6">Get started with the basics.</p>
               <ul className="space-y-3 text-sm mb-8">
                 {[`${sampleLessons.length} free lessons`, 'Basic quizzes', `${wisdomPaths.length} learning paths`, 'Community access'].map((f) =>
-                <li key={f} className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> {f}</li>
+                  <li key={f} className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> {f}</li>
                 )}
               </ul>
               {user ?
-              <Link to="/library"><Button variant="outline" className="w-full">Go to Library</Button></Link> :
+                <Link to="/library"><Button variant="outline" className="w-full">Go to Library</Button></Link> :
 
-              <Button variant="outline" className="w-full" onClick={() => navigate('/auth/login')}>Get Started</Button>
+                <Button variant="outline" className="w-full" onClick={() => navigate('/auth/login')}>Get Started</Button>
               }
             </Card>
           </motion.div>
@@ -316,13 +309,13 @@ function Pricing() {
               <p className="text-sm text-muted-foreground mb-6">Unlock the full experience.</p>
               <ul className="space-y-3 text-sm mb-8">
                 {[`Full lesson library (${sampleLessons.length} lessons)`, `All ${wisdomPaths.length} learning paths`, 'Progress tracking & analytics', 'Certificates of completion', 'Exclusive premium content', 'Ad-free experience'].map((f) =>
-                <li key={f} className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> {f}</li>
+                  <li key={f} className="flex items-center gap-2"><CheckCircle className="w-4 h-4 text-primary" /> {f}</li>
                 )}
               </ul>
               {user ?
-              <Link to="/library"><Button className="w-full">Go to Library</Button></Link> :
+                <Link to="/library"><Button className="w-full">Go to Library</Button></Link> :
 
-              <Button className="w-full" onClick={() => navigate('/auth/login')}>Start Premium</Button>
+                <Button className="w-full" onClick={() => navigate('/auth/login')}>Start Premium</Button>
               }
             </Card>
           </motion.div>
