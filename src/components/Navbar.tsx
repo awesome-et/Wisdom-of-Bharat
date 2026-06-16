@@ -129,93 +129,68 @@ export default function Navbar() {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="w-[320px] sm:w-[380px] p-0 flex flex-col bg-background"
+                  className="w-[300px] p-0 bg-background flex flex-col"
                 >
-                  {/* Header */}
-                  <div className="border-b px-5 py-4">
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-accent flex items-center justify-center shrink-0">
+                  {/* Logo */}
+                  <div className="h-16 border-b flex items-center px-6">
+                    <Link
+                      to="/"
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-2 font-serif text-xl font-bold"
+                    >
+                      <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                         <BookOpen className="w-5 h-5 text-primary-foreground" />
                       </div>
 
-                      <div className="min-w-0">
-                        <h2 className="font-semibold text-lg truncate">
-                          Wisdom Of <span className="text-primary">Bharat</span>
-                        </h2>
-                      </div>
-                    </div>
+                      <span>
+                        Wisdom Of <span className="text-primary">Bharat</span>
+                      </span>
+                    </Link>
                   </div>
 
-                  {/* Body */}
-                  <div className="flex-1 overflow-y-auto px-5 py-5">
-
-                    {/* Navigation */}
-                    <div className="space-y-2">
-                      <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium">
-                        Navigation
-                      </p>
-
-                      {links.map((l) => (
-                        <Link
-                          key={l.href}
-                          to={l.href}
-                          onClick={() => setOpen(false)}
-                          className={`flex items-center gap-3 rounded-lg px-3 py-3 transition-colors ${location.pathname === l.href
-                            ? "bg-primary text-primary-foreground"
-                            : "hover:bg-muted"
-                            }`}
-                        >
-                          <BookOpen className="w-5 h-5" />
-                          <span>{l.label}</span>
-                        </Link>
-                      ))}
-                    </div>
-
-                    {/* User Card */}
-                    <div className="mt-8">
-                      <p className="text-xs uppercase tracking-widest text-muted-foreground font-medium mb-3">
-                        Account
-                      </p>
-
-                      <div className="rounded-xl bg-muted p-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-bold">
-                            {initials}
-                          </div>
-
-                          <div className="min-w-0">
-                            <p className="font-medium truncate">
-                              {getUserDisplayName()}
-                            </p>
-
-                            <p className="text-sm text-muted-foreground truncate">
-                              {user.email}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  {/* Navigation */}
+                  <div className="py-4 px-3">
+                    {links.map((l) => (
+                      <Link
+                        key={l.href}
+                        to={l.href}
+                        onClick={() => setOpen(false)}
+                        className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${location.pathname === l.href
+                            ? "bg-muted text-foreground"
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          }`}
+                      >
+                        {l.label}
+                      </Link>
+                    ))}
                   </div>
 
-                  {/* Footer */}
-                  <div className="border-t p-4 bg-background space-y-2">
+                  {/* Push profile to bottom */}
+                  <div className="mt-auto border-t p-3">
 
                     <Link
                       to="/profile"
                       onClick={() => setOpen(false)}
-                      className="block"
+                      className="flex items-center gap-3 rounded-md p-2 hover:bg-muted transition-colors"
                     >
-                      <Button
-                        className="w-full h-11"
-                      >
-                        <User className="w-4 h-4 mr-2" />
-                        Profile & Settings
-                      </Button>
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-primary-foreground font-semibold text-sm">
+                        {initials}
+                      </div>
+
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">
+                          {getUserDisplayName()}
+                        </p>
+
+                        <p className="text-xs text-muted-foreground truncate">
+                          {user.email}
+                        </p>
+                      </div>
                     </Link>
 
                     <Button
-                      variant="destructive"
-                      className="w-full h-11"
+                      variant="ghost"
+                      className="w-full justify-start mt-2 text-destructive hover:text-destructive"
                       disabled={isSigningOut}
                       onClick={handleSignOut}
                     >
@@ -227,11 +202,10 @@ export default function Navbar() {
                       ) : (
                         <>
                           <LogOut className="w-4 h-4 mr-2" />
-                          Sign Out
+                          Sign out
                         </>
                       )}
                     </Button>
-
                   </div>
                 </SheetContent>
 
