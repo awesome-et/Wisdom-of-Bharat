@@ -36,10 +36,7 @@ function LandingNav() {
 
   const links = [
     { label: 'Categories', href: '#categories' },
-    // { label: 'Paths', href: '#paths' },
-    // { label: 'Pricing', href: '#pricing' }
   ];
-
 
   return (
     <header className="sticky top-0 z-50 glass">
@@ -75,10 +72,9 @@ function LandingNav() {
           )}
         </div>
       </div>
-    </header>);
-
+    </header>
+  );
 }
-
 function Hero() {
   const { user } = useAuth();
   const navigate = useNavigate();
