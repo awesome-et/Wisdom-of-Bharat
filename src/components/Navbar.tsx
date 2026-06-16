@@ -121,63 +121,84 @@ export default function Navbar() {
                 </DropdownMenu>
               </div>
 
-              {/* Mobile Navigation Sheet Drawer */}
+          {/* Mobile Navigation Sheet Drawer */}
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="md:hidden">
-                    <Menu className="w-5 h-5" />
+                  <Button variant="ghost" size="icon" className="md:hidden rounded-full hover:bg-muted/80">
+                    <Menu className="w-5 h-5 text-foreground" />
                   </Button>
                 </SheetTrigger>
-
-                {/* FIX: We use explicit, non-variable solid color utilities (bg-white dark:bg-neutral-950)
-                  to completely block background bleed-through, combined with an explicit opaque border.
-                */}
-                <SheetContent
-                  side="right"
-                  className="w-72 z-50 bg-white dark:bg-neutral-950 border-l border-neutral-200 dark:border-neutral-800 shadow-2xl p-6 text-foreground"
+                
+                <SheetContent 
+                  side="right" 
+                  className="w-80 z-50 bg-white dark:bg-zinc-950 border-l border-zinc-200 dark:border-zinc-800 p-0 text-foreground flex flex-col h-full shadow-2xl"
                 >
-                  <div className="flex flex-col gap-5 mt-8">
-                    {links.map(l => (
-                      <Link
-                        key={l.href}
-                        to={l.href}
-                        onClick={() => setOpen(false)}
-                        className="text-lg font-medium py-2 text-foreground hover:text-primary transition-colors block border-b border-border/40"
-                      >
-                        {l.label}
-                      </Link>
-                    ))}
+                  {/* Drawer Header Area */}
+                  <div className="p-6 border-b border-zinc-100 dark:border-zinc-900 flex items-center justify-between">
+                    <div className="flex items-center gap-2 font-serif text-lg font-bold">
+                      <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                        <BookOpen className="w-4 h-4 text-primary-foreground" />
+                      </div>
+                      <span>Wisdom Of <span className="text-primary">Bharat</span></span>
+                    </div>
+                  </div>
 
-                    {/* User Profile Info Card Container */}
-                    <div className="bg-neutral-50 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 p-4 rounded-xl mt-2 shadow-sm">
-                      <p className="text-sm font-semibold text-foreground tracking-tight">{getUserDisplayName()}</p>
-                      <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
+                  {/* Scrollable Navigation Body */}
+                  <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                    <div className="space-y-1">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">Navigation</p>
+                      {links.map(l => (
+                        <Link 
+                          key={l.href} 
+                          to={l.href} 
+                          onClick={() => setOpen(false)} 
+                          className="flex items-center w-full px-3 py-2.5 text-base font-medium text-foreground hover:text-primary hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all"
+                        >
+                          {l.label}
+                        </Link>
+                      ))}
                     </div>
 
-                    <div className="flex flex-col gap-3 mt-4">
-                      <Link to="/profile" onClick={() => setOpen(false)} className="w-full">
-                        <Button variant="outline" className="w-full justify-start h-11 bg-white dark:bg-neutral-900 hover:bg-neutral-50 dark:hover:bg-neutral-800 border-neutral-200 dark:border-neutral-800">
-                          <User className="w-4 h-4 mr-2 text-muted-foreground" /> Profile & Settings
-                        </Button>
-                      </Link>
+                    {/* User Account Info Module */}
+                    <div className="border border-zinc-100 dark:border-zinc-900 bg-zinc-50/50 dark:bg-zinc-900/40 p-4 rounded-xl shadow-inner">
+                      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Logged In As</p>
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm text-primary-foreground font-bold">
+                          {initials}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-semibold text-foreground truncate leading-tight">{getUserDisplayName()}</p>
+                          <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                      <Button
-                        variant="destructive"
-                        className={`w-full justify-start h-11 shadow-sm transition-all ${isSigningOut ? 'opacity-50 pointer-events-none' : ''
-                          }`}
-                        onClick={() => {
-                          if (isSigningOut) return;
-                          handleSignOut();
-                        }}
-                      >
-                        {isSigningOut ? (
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                        ) : (
-                          <LogOut className="w-4 h-4 mr-2" />
-                        )}
-                        Sign out
+                  {/* Fixed Drawer Footer Actions */}
+                  <div className="p-6 border-t border-zinc-100 dark:border-zinc-900 bg-zinc-50/30 dark:bg-zinc-900/10 space-y-3">
+                    <Link to="/profile" onClick={() => setOpen(false)} className="block w-full">
+                      <Button variant="outline" className="w-full justify-center h-11 bg-white dark:bg-zinc-900 hover:bg-zinc-50 dark:hover:bg-zinc-800 border-zinc-200 dark:border-zinc-800 font-medium">
+                        <User className="w-4 h-4 mr-2 text-muted-foreground" /> View Profile & Settings
                       </Button>
-                    </div>
+                    </Link>
+                    
+                    <Button 
+                      variant="destructive" 
+                      className={`w-full justify-center h-11 font-medium transition-all shadow-sm ${
+                        isSigningOut ? 'opacity-50 pointer-events-none' : ''
+                      }`}
+                      onClick={() => {
+                        if (isSigningOut) return;
+                        handleSignOut();
+                      }}
+                    >
+                      {isSigningOut ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <LogOut className="w-4 h-4 mr-2" />
+                      )}
+                      Sign out Account
+                    </Button>
                   </div>
                 </SheetContent>
               </Sheet>
