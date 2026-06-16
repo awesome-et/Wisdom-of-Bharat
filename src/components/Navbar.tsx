@@ -2,12 +2,12 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuSeparator, 
+  DropdownMenuTrigger 
 } from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/lib/theme';
 import { useAuth } from '@/lib/auth-supabase';
@@ -66,8 +66,9 @@ export default function Navbar() {
             <Link
               key={l.href}
               to={l.href}
-              className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${location.pathname === l.href ? 'text-foreground bg-muted' : 'text-muted-foreground hover:text-foreground'
-                }`}
+              className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${
+                location.pathname === l.href ? 'text-foreground bg-muted' : 'text-muted-foreground hover:text-foreground'
+              }`}
             >
               {l.label}
             </Link>
@@ -101,8 +102,8 @@ export default function Navbar() {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator className="bg-border" />
-                    <DropdownMenuItem
-                      onClick={handleSignOut}
+                    <DropdownMenuItem 
+                      onClick={handleSignOut} 
                       className="focus:bg-destructive/10 focus:text-destructive cursor-pointer text-destructive flex items-center w-full px-2 py-1.5 text-sm"
                       disabled={isSigningOut}
                     >
@@ -127,10 +128,10 @@ export default function Navbar() {
                 <SheetContent side="right" className="w-72 z-50 bg-card border-l border-border">
                   <div className="flex flex-col gap-4 mt-8">
                     {links.map(l => (
-                      <Link
-                        key={l.href}
-                        to={l.href}
-                        onClick={() => setOpen(false)}
+                      <Link 
+                        key={l.href} 
+                        to={l.href} 
+                        onClick={() => setOpen(false)} 
                         className="text-lg font-medium py-2 text-foreground hover:text-primary transition-colors"
                       >
                         {l.label}
@@ -146,9 +147,9 @@ export default function Navbar() {
                         <User className="w-4 h-4 mr-2" /> Profile
                       </Button>
                     </Link>
-                    <Button
-                      variant="destructive"
-                      className="w-full justify-start"
+                    <Button 
+                      variant="destructive" 
+                      className="w-full justify-start" 
                       onClick={handleSignOut}
                       disabled={isSigningOut}
                     >
