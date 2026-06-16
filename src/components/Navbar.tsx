@@ -103,7 +103,6 @@ export default function Navbar() {
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                       onClick={() => {
-                        // If already processing a sign out, ignore additional clicks
                         if (isSigningOut) return;
                         handleSignOut();
                       }}
@@ -121,16 +120,16 @@ export default function Navbar() {
                 </DropdownMenu>
               </div>
 
-          {/* Mobile Navigation Sheet Drawer */}
+              {/* Mobile Navigation Sheet Drawer */}
               <Sheet open={open} onOpenChange={setOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" className="md:hidden rounded-full hover:bg-muted/80">
                     <Menu className="w-5 h-5 text-foreground" />
                   </Button>
                 </SheetTrigger>
-                
-                <SheetContent 
-                  side="right" 
+
+                <SheetContent
+                  side="right"
                   className="w-80 z-50 bg-white dark:bg-zinc-950 border-l border-zinc-200 dark:border-zinc-800 p-0 text-foreground flex flex-col h-full shadow-2xl"
                 >
                   {/* Drawer Header Area */}
@@ -148,10 +147,10 @@ export default function Navbar() {
                     <div className="space-y-1">
                       <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider px-1 mb-2">Navigation</p>
                       {links.map(l => (
-                        <Link 
-                          key={l.href} 
-                          to={l.href} 
-                          onClick={() => setOpen(false)} 
+                        <Link
+                          key={l.href}
+                          to={l.href}
+                          onClick={() => setOpen(false)}
                           className="flex items-center w-full px-3 py-2.5 text-base font-medium text-foreground hover:text-primary hover:bg-zinc-50 dark:hover:bg-zinc-900 rounded-lg transition-all"
                         >
                           {l.label}
@@ -181,12 +180,11 @@ export default function Navbar() {
                         <User className="w-4 h-4 mr-2 text-muted-foreground" /> View Profile & Settings
                       </Button>
                     </Link>
-                    
-                    <Button 
-                      variant="destructive" 
-                      className={`w-full justify-center h-11 font-medium transition-all shadow-sm ${
-                        isSigningOut ? 'opacity-50 pointer-events-none' : ''
-                      }`}
+
+                    <Button
+                      variant="destructive"
+                      className={`w-full justify-center h-11 font-medium transition-all shadow-sm ${isSigningOut ? 'opacity-50 pointer-events-none' : ''
+                        }`}
                       onClick={() => {
                         if (isSigningOut) return;
                         handleSignOut();
