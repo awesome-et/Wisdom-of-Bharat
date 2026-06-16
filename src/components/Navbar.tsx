@@ -128,41 +128,55 @@ export default function Navbar() {
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-72 z-50 bg-card border-l border-border">
-                  <div className="flex flex-col gap-4 mt-8">
+                {/* Fix: Swapped bg-card out for a solid bg-background layer 
+                  and added a crisp backdrop blur to filter out structural noise beneath it
+                */}
+                <SheetContent
+                  side="right"
+                  className="w-72 z-50 bg-background/95 backdrop-blur-xl border-l border-border shadow-2xl p-6 text-foreground"
+                >
+                  <div className="flex flex-col gap-5 mt-8">
                     {links.map(l => (
                       <Link
                         key={l.href}
                         to={l.href}
                         onClick={() => setOpen(false)}
-                        className="text-lg font-medium py-2 text-foreground hover:text-primary transition-colors"
+                        className="text-lg font-medium py-2 text-foreground hover:text-primary transition-colors block border-b border-border/40"
                       >
                         {l.label}
                       </Link>
                     ))}
-                    <hr className="border-border" />
-                    <div className="bg-muted p-3 rounded-lg">
-                      <p className="text-sm font-medium text-foreground">{getUserDisplayName()}</p>
-                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+
+                    {/* User Profile Info Card Container */}
+                    <div className="bg-muted/80 border border-border/60 p-4 rounded-xl mt-2 shadow-sm">
+                      <p className="text-sm font-semibold text-foreground tracking-tight">{getUserDisplayName()}</p>
+                      <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
                     </div>
-                    <Link to="/profile" onClick={() => setOpen(false)} className="w-full">
-                      <Button variant="outline" className="w-full justify-start">
-                        <User className="w-4 h-4 mr-2" /> Profile
+
+                    <div className="flex flex-col gap-3 mt-4">
+                      <Link to="/profile" onClick={() => setOpen(false)} className="w-full">
+                        <Button variant="outline" className="w-full justify-start h-11 bg-card hover:bg-muted border-border/80">
+                          <User className="w-4 h-4 mr-2 text-muted-foreground" /> Profile & Settings
+                        </Button>
+                      </Link>
+
+                      <Button
+                        variant="destructive"
+                        className={`w-full justify-start h-11 shadow-sm transition-all ${isSigningOut ? 'opacity-50 pointer-events-none' : ''
+                          }`}
+                        onClick={() => {
+                          if (isSigningOut) return;
+                          handleSignOut();
+                        }}
+                      >
+                        {isSigningOut ? (
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        ) : (
+                          <LogOut className="w-4 h-4 mr-2" />
+                        )}
+                        Sign out
                       </Button>
-                    </Link>
-                    <Button
-                      variant="destructive"
-                      className="w-full justify-start"
-                      onClick={handleSignOut}
-                      disabled={isSigningOut}
-                    >
-                      {isSigningOut ? (
-                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      ) : (
-                        <LogOut className="w-4 h-4 mr-2" />
-                      )}
-                      Sign out
-                    </Button>
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>
