@@ -129,7 +129,7 @@ export default function Navbar() {
                 </SheetTrigger>
                 <SheetContent
                   side="right"
-                  className="w-[300px] p-0 bg-background flex flex-col"
+                  className="p-0"
                 >
                   {/* Logo */}
                   <div className="h-16 border-b flex items-center px-6">
@@ -156,8 +156,8 @@ export default function Navbar() {
                         to={l.href}
                         onClick={() => setOpen(false)}
                         className={`flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors ${location.pathname === l.href
-                            ? "bg-muted text-foreground"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                          ? "bg-muted text-foreground"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted"
                           }`}
                       >
                         {l.label}
