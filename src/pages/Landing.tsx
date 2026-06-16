@@ -113,7 +113,7 @@ function Hero() {
                 </Button>
               </>
             }
-          </div>
+          </div> 
           <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><BookOpen className="w-4 h-4 text-primary" /> {sampleLessons.length} Lessons</span>
             <span className="flex items-center gap-1.5"><Target className="w-4 h-4 text-primary" /> {categories.length} Categories</span>
