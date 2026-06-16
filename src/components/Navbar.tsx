@@ -2,7 +2,13 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { useTheme } from '@/lib/theme';
 import { useAuth } from '@/lib/auth-supabase';
 import { Menu, Sun, Moon, BookOpen, LogOut, User, Loader2 } from 'lucide-react';
@@ -60,9 +66,8 @@ export default function Navbar() {
             <Link
               key={l.href}
               to={l.href}
-              className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${
-                location.pathname === l.href ? 'text-foreground bg-muted' : 'text-muted-foreground hover:text-foreground'
-              }`}
+              className={`px-3 py-2 text-sm font-medium transition-colors rounded-md ${location.pathname === l.href ? 'text-foreground bg-muted' : 'text-muted-foreground hover:text-foreground'
+                }`}
             >
               {l.label}
             </Link>
@@ -76,71 +81,82 @@ export default function Navbar() {
 
           {!isLoading && user && (
             <>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild className="hidden md:flex">
-                  <button className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm text-primary-foreground font-bold cursor-pointer hover:shadow-md transition-shadow">
-                    {initials}
-                  </button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">{getUserDisplayName()}</p>
-                    <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-                  </div>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem asChild>
-                    <Link to="/profile" className="cursor-pointer">
-                      <User className="w-4 h-4 mr-2" /> Profile & Settings
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem 
-                    onClick={handleSignOut} 
-                    className={`cursor-pointer text-destructive ${isSigningOut ? 'opacity-50 pointer-events-none' : ''}`}
-                  >
-                    {isSigningOut && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                    {!isSigningOut && <LogOut className="w-4 h-4 mr-2" />}
-                    Sign out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              {/* Desktop Profile Dropdown View */}
+              <div className="hidden md:block">
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <button className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-sm text-primary-foreground font-bold cursor-pointer hover:shadow-md transition-shadow focus:outline-none">
+                      {initials}
+                    </button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56 z-50 bg-card border border-border shadow-md">
+                    <div className="px-2 py-1.5">
+                      <p className="text-sm font-medium text-foreground">{getUserDisplayName()}</p>
+                      <p className="text-xs text-muted-foreground truncate">{user.email}</p>
+                    </div>
+                    <DropdownMenuSeparator className="bg-border" />
+                    <DropdownMenuItem asChild className="focus:bg-muted focus:text-foreground cursor-pointer">
+                      <Link to="/profile" className="flex items-center w-full px-2 py-1.5 text-sm">
+                        <User className="w-4 h-4 mr-2" /> Profile & Settings
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator className="bg-border" />
+                    <DropdownMenuItem
+                      onClick={handleSignOut}
+                      className="focus:bg-destructive/10 focus:text-destructive cursor-pointer text-destructive flex items-center w-full px-2 py-1.5 text-sm"
+                      disabled={isSigningOut}
+                    >
+                      {isSigningOut ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <LogOut className="w-4 h-4 mr-2" />
+                      )}
+                      Sign out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
 
+              {/* Mobile Navigation Sheet Drawer */}
               <Sheet open={open} onOpenChange={setOpen}>
-                <SheetTrigger asChild className="md:hidden">
-                  <Button variant="ghost" size="icon">
+                <SheetTrigger asChild>
+                  <Button variant="ghost" size="icon" className="md:hidden">
                     <Menu className="w-5 h-5" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-72">
+                <SheetContent side="right" className="w-72 z-50 bg-card border-l border-border">
                   <div className="flex flex-col gap-4 mt-8">
                     {links.map(l => (
-                      <Link 
-                        key={l.href} 
-                        to={l.href} 
-                        onClick={() => setOpen(false)} 
-                        className="text-lg font-medium py-2"
+                      <Link
+                        key={l.href}
+                        to={l.href}
+                        onClick={() => setOpen(false)}
+                        className="text-lg font-medium py-2 text-foreground hover:text-primary transition-colors"
                       >
                         {l.label}
                       </Link>
                     ))}
                     <hr className="border-border" />
                     <div className="bg-muted p-3 rounded-lg">
-                      <p className="text-sm font-medium">{getUserDisplayName()}</p>
+                      <p className="text-sm font-medium text-foreground">{getUserDisplayName()}</p>
                       <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                     </div>
-                    <Link to="/profile" onClick={() => setOpen(false)}>
-                      <Button variant="outline" className="w-full">
+                    <Link to="/profile" onClick={() => setOpen(false)} className="w-full">
+                      <Button variant="outline" className="w-full justify-start">
                         <User className="w-4 h-4 mr-2" /> Profile
                       </Button>
                     </Link>
-                    <Button 
-                      variant="destructive" 
-                      className="w-full" 
+                    <Button
+                      variant="destructive"
+                      className="w-full justify-start"
                       onClick={handleSignOut}
                       disabled={isSigningOut}
                     >
-                      {isSigningOut && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                      {!isSigningOut && <LogOut className="w-4 h-4 mr-2" />}
+                      {isSigningOut ? (
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      ) : (
+                        <LogOut className="w-4 h-4 mr-2" />
+                      )}
                       Sign out
                     </Button>
                   </div>
