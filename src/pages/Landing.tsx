@@ -63,16 +63,16 @@ function LandingNav() {
           <Button variant="ghost" size="icon" onClick={toggle} className="rounded-full">
             {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
           </Button>
-          {user ?
-            <Link to="/library">
-              <Button size="sm">Go to Library <ArrowRight className="w-3 h-3 ml-1" /></Button>
-            </Link> :
-            <>
-              <Button variant="ghost" size="sm" className="hidden md:inline-flex" onClick={() => navigate('/auth/login')}>
-                <LogIn className="w-4 h-4 mr-1" /> Log in
-              </Button>
-            </>
-          }
+          {!user && (
+            <Button
+              variant="ghost"
+              size="sm"
+              className="hidden md:inline-flex"
+              onClick={() => navigate('/auth/login')}
+            >
+              <LogIn className="w-4 h-4 mr-1" /> Log in
+            </Button>
+          )}
         </div>
       </div>
     </header>);
@@ -113,7 +113,7 @@ function Hero() {
                 </Button>
               </>
             }
-          </div> 
+          </div>
           <div className="flex items-center justify-center gap-8 mt-12 text-sm text-muted-foreground">
             <span className="flex items-center gap-1.5"><BookOpen className="w-4 h-4 text-primary" /> {sampleLessons.length} Lessons</span>
             <span className="flex items-center gap-1.5"><Target className="w-4 h-4 text-primary" /> {categories.length} Categories</span>
