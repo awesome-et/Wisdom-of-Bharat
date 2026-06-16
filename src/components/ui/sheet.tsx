@@ -57,24 +57,20 @@ export function SheetContent({
       {/* Drawer */}
       <div
         className={`
-          fixed top-0 ${side === "left" ? "left-0" : "right-0"
-          }
-          z-[100]
-          h-screen
-          w-[320px]
-          max-w-[90vw]
-          bg-background
-          border-l
-          border-border
-          shadow-2xl
-          transition-transform
-          duration-300
-          ${side === "left"
-            ? "translate-x-0"
-            : "translate-x-0"
-          }
-          ${className}
-        `}
+    fixed
+    top-4
+    right-4
+    z-[100]
+    w-[320px]
+    max-w-[calc(100vw-2rem)]
+    rounded-2xl
+    bg-background
+    border
+    border-border
+    shadow-2xl
+    overflow-hidden
+    ${className}
+  `}
       >
         {children}
       </div>
