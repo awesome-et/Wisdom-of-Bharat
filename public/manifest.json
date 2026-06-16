@@ -29,7 +29,7 @@
   "screenshots": [
     {
       "src": "/icon-320x320.png",
-      "sizes": "192x192",
+      "sizes": "320x320",
       "type": "image/png",
       "form_factor": "narrow"
     },
